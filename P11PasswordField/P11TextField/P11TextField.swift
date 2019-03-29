@@ -34,11 +34,9 @@ public final class P11PasswordField: UIView {
         return view
     }()
     
-    private let greaterThan8Label: UILabel = {
-        let view: UILabel = UILabel()
-        view.font = UIFont.systemFont(ofSize: 22.0, weight: UIFont.Weight.bold)
-        view.textColor = UIColor.black
-        view.text = "18+"
+    public let criteriaGreater8: CriteriaView = {
+        let view: CriteriaView = CriteriaView()
+         view.setCriteria(label: "Characters")
         return view
     }()
     
@@ -47,7 +45,7 @@ public final class P11PasswordField: UIView {
         super.init(frame: frame)
         self.subviews(forAutoLayout: [
             self.passwordLabel, self.mainTextField,
-            self.horizontalLineView, self.greaterThan8Label
+            self.horizontalLineView, self.criteriaGreater8
         ])
         
         self.passwordLabel.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
@@ -67,9 +65,11 @@ public final class P11PasswordField: UIView {
             make.centerY.equalTo(self.mainTextField.snp.bottom)
         }
         
-        self.greaterThan8Label.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.horizontalLineView.snp.bottom).offset(20.0)
+        self.criteriaGreater8.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.horizontalLineView.snp.bottom)
             make.leading.equalTo(self.mainTextField.snp.leading)
+            make.height.equalTo(50.0)
+            make.width.equalTo(50.0)
             make.bottom.equalToSuperview()
         }
     }
