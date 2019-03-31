@@ -17,7 +17,7 @@
 		81833FF1224DE18C009D082F /* P11PasswordFieldUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81833FF0224DE18C009D082F /* P11PasswordFieldUITests.swift */; };
 		81834006224DE22A009D082F /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81834005224DE22A009D082F /* UIViewExtension.swift */; };
 		8183400B224DE440009D082F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183400A224DE440009D082F /* MainView.swift */; };
-		8183400E224DE5BB009D082F /* P11TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183400D224DE5BB009D082F /* P11TextField.swift */; };
+		8183400E224DE5BB009D082F /* P11PasswordField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183400D224DE5BB009D082F /* P11PasswordField.swift */; };
 		81834010224DEF40009D082F /* CriteriaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8183400F224DEF40009D082F /* CriteriaView.swift */; };
 		F35E744BE13FF0D218066DB7 /* Pods_P11PasswordField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1063887086EFA454B6D768A1 /* Pods_P11PasswordField.framework */; };
 /* End PBXBuildFile section */
@@ -59,7 +59,7 @@
 		81833FF2224DE18C009D082F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81834005224DE22A009D082F /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		8183400A224DE440009D082F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		8183400D224DE5BB009D082F /* P11TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P11TextField.swift; sourceTree = "<group>"; };
+		8183400D224DE5BB009D082F /* P11PasswordField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P11PasswordField.swift; sourceTree = "<group>"; };
 		8183400F224DEF40009D082F /* CriteriaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CriteriaView.swift; sourceTree = "<group>"; };
 		97B20B0BA3912E4EE6CB9D9A /* Pods-P11PasswordFieldTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-P11PasswordFieldTests.debug.xcconfig"; path = "Target Support Files/Pods-P11PasswordFieldTests/Pods-P11PasswordFieldTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D9991002F949291B438ED4C8 /* Pods-P11PasswordField.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-P11PasswordField.release.xcconfig"; path = "Target Support Files/Pods-P11PasswordField/Pods-P11PasswordField.release.xcconfig"; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 				81834008224DE253009D082F /* Supporting Files */,
 				81833FFF224DE1D1009D082F /* Utilities */,
 				81834007224DE24C009D082F /* Main */,
-				8183400C224DE57D009D082F /* P11TextField */,
+				8183400C224DE57D009D082F /* P11PasswordField */,
 				81833FDC224DE18C009D082F /* Info.plist */,
 			);
 			path = P11PasswordField;
@@ -253,13 +253,13 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		8183400C224DE57D009D082F /* P11TextField */ = {
+		8183400C224DE57D009D082F /* P11PasswordField */ = {
 			isa = PBXGroup;
 			children = (
-				8183400D224DE5BB009D082F /* P11TextField.swift */,
+				8183400D224DE5BB009D082F /* P11PasswordField.swift */,
 				8183400F224DEF40009D082F /* CriteriaView.swift */,
 			);
-			path = P11TextField;
+			path = P11PasswordField;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -487,7 +487,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8183400E224DE5BB009D082F /* P11TextField.swift in Sources */,
+				8183400E224DE5BB009D082F /* P11PasswordField.swift in Sources */,
 				81834006224DE22A009D082F /* UIViewExtension.swift in Sources */,
 				8183400B224DE440009D082F /* MainView.swift in Sources */,
 				81833FD3224DE189009D082F /* MainVC.swift in Sources */,
