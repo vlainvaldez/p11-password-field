@@ -61,6 +61,13 @@ public final class P11PasswordField: UIView {
         return view
     }()
     
+    public let criteriaSpecialCharacters: CriteriaView = {
+        let view: CriteriaView = CriteriaView()
+        view.setCriteria(label: "Special")
+        view.setCriteriaTextIcon(with: "%$")
+        return view
+    }()
+    
     private let criteriaStackView: UIStackView = {
         let view: UIStackView = UIStackView()
         view.axis = NSLayoutConstraint.Axis.horizontal
@@ -111,10 +118,22 @@ public final class P11PasswordField: UIView {
         }
     }
     
+    private var hasSpecialCharacters: Bool = false {
+        didSet {
+            switch self.hasSpecialCharacters {
+            case true:
+                self.criteriaSpecialCharacters.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+            case false:
+                self.criteriaSpecialCharacters.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+            }
+        }
+    }
+    
     private var mustBe8Characters: Bool = false
     private var mustHaveUpperCase: Bool = false
     private var mustHaveLowerCase: Bool = false
     private var mustHaveNumber: Bool = false
+    private var mustHaveSpecialCharacters: Bool = false
     
     // MARK: Initializer
     public override init(frame: CGRect) {
@@ -180,6 +199,11 @@ extension P11PasswordField {
         self.criteriaStackView.addArrangedSubview(self.criteriaNumber)
     }
     
+    public func withSpecialCharacters() {
+        self.mustHaveSpecialCharacters = true
+        self.criteriaStackView.addArrangedSubview(self.criteriaSpecialCharacters)
+    }
+    
 }
 
 // MARK: - UITextFieldDelegate Methods
@@ -202,23 +226,30 @@ extension P11PasswordField {
     
     private func doesHaveUpperCase(password: String) -> Bool {
         let upperCaseLetterRegEx  = ".*[A-Z]+.*"
-        let texttest = NSPredicate(format:"SELF MATCHES %@", upperCaseLetterRegEx)
-        let upperCaseResult = texttest.evaluate(with: password)
+        let textMatch = NSPredicate(format:"SELF MATCHES %@", upperCaseLetterRegEx)
+        let upperCaseResult = textMatch.evaluate(with: password)
         return upperCaseResult
     }
     
     private func doesHaveLowerCase(password: String) -> Bool {
         let lowerCaseLetterRegEx  = ".*[a-z]+.*"
-        let texttest = NSPredicate(format:"SELF MATCHES %@", lowerCaseLetterRegEx)
-        let lowerCaseResult = texttest.evaluate(with: password)
+        let textMatch = NSPredicate(format:"SELF MATCHES %@", lowerCaseLetterRegEx)
+        let lowerCaseResult = textMatch.evaluate(with: password)
         return lowerCaseResult
     }
     
     private func doesHaveNumber(password: String) -> Bool {
         let numberRegEx  = ".*[0-9]+.*"
-        let texttest = NSPredicate(format:"SELF MATCHES %@", numberRegEx)
-        let numberResult = texttest.evaluate(with: password)
+        let textMatch = NSPredicate(format:"SELF MATCHES %@", numberRegEx)
+        let numberResult = textMatch.evaluate(with: password)
         return numberResult
+    }
+    
+    private func doesHaveSpecialCharacters(password: String) -> Bool {
+        let specialCharactersRegEx  = ".*[!&^%$#@()/]+.*"
+        let textMatch = NSPredicate(format:"SELF MATCHES %@", specialCharactersRegEx)
+        let specialCharactersResult = textMatch.evaluate(with: password)
+        return specialCharactersResult
     }
     
     private func criteriaChecker(password: String) {
@@ -250,6 +281,13 @@ extension P11PasswordField {
         case false:
             self.hasNumber = false
         }
+        
+        switch self.doesHaveSpecialCharacters(password: password) && self.mustHaveSpecialCharacters {
+        case true:
+            self.hasSpecialCharacters = true
+        case false:
+            self.hasSpecialCharacters = false
+        }
     }
     
     private func resetBackground() {
@@ -257,6 +295,7 @@ extension P11PasswordField {
         self.criteriaUpperCase.backgroundColor = UIColor.clear
         self.criteriaLowerCase.backgroundColor = UIColor.clear
         self.criteriaNumber.backgroundColor = UIColor.clear
+        self.criteriaSpecialCharacters.backgroundColor = UIColor.clear
     }
 }
 

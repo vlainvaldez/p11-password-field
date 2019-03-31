@@ -18,6 +18,7 @@ public class MainView: UIView {
         view.withUpperCase()
         view.withLowerCase()
         view.withNumber()
+        view.withSpecialCharacters()
         return view
     }()
     
