@@ -40,12 +40,41 @@ public final class P11PasswordField: UIView {
         return view
     }()
     
+    public let criteriaUpperCase: CriteriaView = {
+        let view: CriteriaView = CriteriaView()
+        view.setCriteria(label: "UpperCase")
+        view.setCriteriaTextIcon(with: "A")
+        return view
+    }()
+    
+    public let criteriaLowerCase: CriteriaView = {
+        let view: CriteriaView = CriteriaView()
+        view.setCriteria(label: "LowerCase")
+        view.setCriteriaTextIcon(with: "a")
+        return view
+    }()
+    
+    public let criteriaNumber: CriteriaView = {
+        let view: CriteriaView = CriteriaView()
+        view.setCriteria(label: "Number")
+        view.setCriteriaTextIcon(with: "1")
+        return view
+    }()
+    
+    private let criteriaStackView: UIStackView = {
+        let view: UIStackView = UIStackView()
+        view.axis = NSLayoutConstraint.Axis.horizontal
+        view.alignment = UIStackView.Alignment.center
+        view.distribution = UIStackView.Distribution.fillEqually
+        return view
+    }()
+    
     // MARK: Initializer
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.subviews(forAutoLayout: [
             self.passwordLabel, self.mainTextField,
-            self.horizontalLineView, self.criteriaGreater8
+            self.horizontalLineView, self.criteriaStackView
         ])
         
         self.passwordLabel.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
@@ -65,17 +94,35 @@ public final class P11PasswordField: UIView {
             make.centerY.equalTo(self.mainTextField.snp.bottom)
         }
         
-        self.criteriaGreater8.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.horizontalLineView.snp.bottom)
-            make.leading.equalTo(self.mainTextField.snp.leading)
-            make.height.equalTo(50.0)
-            make.width.equalTo(50.0)
+        self.criteriaStackView.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.horizontalLineView.snp.bottom).offset(10.0)
+            make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: Public API's
+extension P11PasswordField {
+    
+    public func has8Characters() {
+        self.criteriaStackView.addArrangedSubview(self.criteriaGreater8)
+    }
+    
+    public func hasUpperCase() {
+        self.criteriaStackView.addArrangedSubview(self.criteriaUpperCase)
+    }
+    
+    public func hasLowerCase() {
+        self.criteriaStackView.addArrangedSubview(self.criteriaLowerCase)
+    }
+    
+    public func hasNumber() {
+        self.criteriaStackView.addArrangedSubview(self.criteriaNumber)
     }
     
 }

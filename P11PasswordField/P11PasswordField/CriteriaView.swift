@@ -18,8 +18,8 @@ public class CriteriaView: UIView {
     
     private let criterialTextIcon: UILabel = {
         let view: UILabel = UILabel()
-        view.text = "Criteria"
-        view.font = UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
+        view.text = "8+"
+        view.font = UIFont.systemFont(ofSize: 20.0, weight: UIFont.Weight.medium)
         return view
     }()
     
@@ -38,16 +38,23 @@ public class CriteriaView: UIView {
             self.boxView, self.criteriaLabel
         ])
         
-        self.boxView.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+        self.boxView.subview(forAutoLayout: self.criterialTextIcon)
+        
+        self.boxView.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(self.criteriaLabel.snp.top)
         }
         
-        self.criteriaLabel.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
+        self.criterialTextIcon.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
+            make.centerX.centerY.equalToSuperview()
+        }
+
+        self.criteriaLabel.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.boxView.snp.bottom).offset(20.0)
             make.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
+        
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -61,5 +68,12 @@ extension CriteriaView {
         self.criteriaLabel.text = label
     }
     
-    
+    public func setCriteriaTextIcon(with label: String) {
+        switch label.count >= 1 || label.count <= 2 {
+        case true:
+            self.criterialTextIcon.text = label
+        case false:
+            break
+        }
+    }
 }
