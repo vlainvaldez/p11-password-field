@@ -20,8 +20,8 @@ public final class P11PasswordField: UIView {
         return view
     }()
     
-    public let mainTextField: UITextField = {
-        let view: UITextField = UITextField()
+    private let mainTextField: PasswordField = {
+        let view: PasswordField = PasswordField()
         view.isSecureTextEntry = true
         view.borderStyle = UITextField.BorderStyle.none
         view.font = UIFont.systemFont(ofSize: 16.0)
@@ -69,9 +69,42 @@ public final class P11PasswordField: UIView {
         return view
     }()
     
+    private var has8Characters: Bool = false {
+        didSet {
+            switch self.has8Characters {
+            case true:
+                self.criteriaGreater8.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+            case false:
+                self.criteriaGreater8.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+            }
+        }
+    }
+    
+    private var hasUpperCase: Bool = false {
+        didSet {
+            switch self.hasUpperCase {
+            case true:
+                self.criteriaUpperCase.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+            case false:
+                self.criteriaUpperCase.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+            }
+        }
+    }
+    private var hasLowerCase: Bool = false
+    private var hasNumber: Bool = false
+    
+    private var mustBe8Characters: Bool = false
+    private var mustHaveUpperCase: Bool = false
+    private var mustHaveLowerCase: Bool = false
+    private var mustHaveNumber: Bool = false
+    
     // MARK: Initializer
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        self.mainTextField.delegate = self
+        self.mainTextField.passwordfieldDelegate = self
+        
         self.subviews(forAutoLayout: [
             self.passwordLabel, self.mainTextField,
             self.horizontalLineView, self.criteriaStackView
@@ -106,23 +139,123 @@ public final class P11PasswordField: UIView {
     }
 }
 
-// MARK: Public API's
+// MARK: - Public APIs
 extension P11PasswordField {
     
-    public func has8Characters() {
+    public func with8Characters() {
+        self.mustBe8Characters = true
         self.criteriaStackView.addArrangedSubview(self.criteriaGreater8)
     }
     
-    public func hasUpperCase() {
+    public func withUpperCase() {
+        self.mustHaveUpperCase = true
         self.criteriaStackView.addArrangedSubview(self.criteriaUpperCase)
     }
     
-    public func hasLowerCase() {
+    public func withLowerCase() {
+        self.mustHaveLowerCase = true
         self.criteriaStackView.addArrangedSubview(self.criteriaLowerCase)
     }
     
-    public func hasNumber() {
+    public func withNumber() {
+        self.mustHaveNumber = true
         self.criteriaStackView.addArrangedSubview(self.criteriaNumber)
     }
     
+}
+
+// MARK: - UITextFieldDelegate Methods
+extension P11PasswordField: UITextFieldDelegate {
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        self.criteriaChecker(password: text)
+    }
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let text = textField.text else { return true }
+        self.criteriaChecker(password: text)
+        return true
+    }
+    
+    public func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        
+        self.criteriaGreater8.backgroundColor = UIColor.clear
+        self.criteriaUpperCase.backgroundColor = UIColor.clear
+        
+        return true
+    }
+}
+
+
+// MARK: - Helper Functions
+extension P11PasswordField {
+    
+    private func doesHaveUpperCase(password: String) -> Bool {
+        let capitalLetterRegEx  = ".*[A-Z]+.*"
+        let texttest = NSPredicate(format:"SELF MATCHES %@", capitalLetterRegEx)
+        let capitalresult = texttest.evaluate(with: password)
+        return capitalresult
+    }
+    
+    private func criteriaChecker(password: String) {
+        
+        switch password.count >= 8 && self.mustBe8Characters {
+        case true:
+            self.has8Characters = true
+        case false:
+            self.has8Characters = false
+        }
+        
+        switch self.doesHaveUpperCase(password: password) {
+        case true:
+            self.hasUpperCase = true
+        case false:
+            self.hasUpperCase = false
+        }
+        
+    }
+}
+
+// MARK: PasswordFieldDelegate Methods
+extension P11PasswordField: PasswordFieldDelegate {
+    fileprivate func textFieldDidDelete(textField: PasswordField) {
+        
+        guard let text = textField.text else { return }
+        
+        switch text.isEmpty {
+        case true:
+            self.criteriaGreater8.backgroundColor = UIColor.clear
+            self.criteriaUpperCase.backgroundColor = UIColor.clear
+        case false:
+            break
+        }
+        
+    }
+}
+
+
+fileprivate protocol PasswordFieldDelegate: class {
+    func textFieldDidDelete(textField: PasswordField)
+}
+
+fileprivate final class PasswordField: UITextField {
+    // MARK: NumericTextFieldDelegate
+    public weak var passwordfieldDelegate: PasswordFieldDelegate!
+    
+    // MARK: Initializer
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+    }
+    
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func deleteBackward() {
+        super.deleteBackward()
+        if let delegate = self.passwordfieldDelegate {
+            delegate.textFieldDidDelete(textField: self)
+        }
+    }
 }

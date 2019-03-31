@@ -16,7 +16,7 @@ public class CriteriaView: UIView {
         return view
     }()
     
-    private let criterialTextIcon: UILabel = {
+    public let criterialTextIcon: UILabel = {
         let view: UILabel = UILabel()
         view.text = "8+"
         view.font = UIFont.systemFont(ofSize: 20.0, weight: UIFont.Weight.medium)
@@ -43,6 +43,7 @@ public class CriteriaView: UIView {
         self.boxView.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
+            make.height.equalTo(20.0)
         }
         
         self.criterialTextIcon.snp.remakeConstraints { (make: ConstraintMaker) -> Void in

@@ -14,9 +14,9 @@ public class MainView: UIView {
     // MARK: Subviews
     public let passwordField: P11PasswordField = {
         let view: P11PasswordField = P11PasswordField()
-        view.has8Characters()
-        view.hasUpperCase()
-        view.hasLowerCase()
+        view.with8Characters()
+        view.withUpperCase()
+        view.withLowerCase()
         return view
     }()
     
