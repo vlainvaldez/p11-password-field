@@ -17,6 +17,7 @@ public class MainView: UIView {
         view.with8Characters()
         view.withUpperCase()
         view.withLowerCase()
+        view.withNumber()
         return view
     }()
     
@@ -29,7 +30,7 @@ public class MainView: UIView {
         self.subview(forAutoLayout: self.passwordField)
         
         self.passwordField.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
-            make.height.equalTo(100.0)
+            make.height.equalTo(120.0)
             make.leading.equalToSuperview().offset(50.0)
             make.trailing.equalToSuperview().inset(50.0)
             make.centerY.equalToSuperview()

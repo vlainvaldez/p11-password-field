@@ -90,8 +90,26 @@ public final class P11PasswordField: UIView {
             }
         }
     }
-    private var hasLowerCase: Bool = false
-    private var hasNumber: Bool = false
+    private var hasLowerCase: Bool = false {
+        didSet {
+            switch self.hasLowerCase {
+            case true:
+                self.criteriaLowerCase.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+            case false:
+                self.criteriaLowerCase.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+            }
+        }
+    }
+    private var hasNumber: Bool = false {
+        didSet {
+            switch self.hasNumber {
+            case true:
+                self.criteriaNumber.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+            case false:
+                self.criteriaNumber.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+            }
+        }
+    }
     
     private var mustBe8Characters: Bool = false
     private var mustHaveUpperCase: Bool = false
@@ -116,7 +134,7 @@ public final class P11PasswordField: UIView {
         }
         
         self.mainTextField.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.passwordLabel.snp.bottom)
+            make.top.equalTo(self.passwordLabel.snp.bottom).offset(10.0)
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
         }
@@ -176,14 +194,6 @@ extension P11PasswordField: UITextFieldDelegate {
         self.criteriaChecker(password: text)
         return true
     }
-    
-    public func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        
-        self.criteriaGreater8.backgroundColor = UIColor.clear
-        self.criteriaUpperCase.backgroundColor = UIColor.clear
-        
-        return true
-    }
 }
 
 
@@ -191,10 +201,24 @@ extension P11PasswordField: UITextFieldDelegate {
 extension P11PasswordField {
     
     private func doesHaveUpperCase(password: String) -> Bool {
-        let capitalLetterRegEx  = ".*[A-Z]+.*"
-        let texttest = NSPredicate(format:"SELF MATCHES %@", capitalLetterRegEx)
-        let capitalresult = texttest.evaluate(with: password)
-        return capitalresult
+        let upperCaseLetterRegEx  = ".*[A-Z]+.*"
+        let texttest = NSPredicate(format:"SELF MATCHES %@", upperCaseLetterRegEx)
+        let upperCaseResult = texttest.evaluate(with: password)
+        return upperCaseResult
+    }
+    
+    private func doesHaveLowerCase(password: String) -> Bool {
+        let lowerCaseLetterRegEx  = ".*[a-z]+.*"
+        let texttest = NSPredicate(format:"SELF MATCHES %@", lowerCaseLetterRegEx)
+        let lowerCaseResult = texttest.evaluate(with: password)
+        return lowerCaseResult
+    }
+    
+    private func doesHaveNumber(password: String) -> Bool {
+        let numberRegEx  = ".*[0-9]+.*"
+        let texttest = NSPredicate(format:"SELF MATCHES %@", numberRegEx)
+        let numberResult = texttest.evaluate(with: password)
+        return numberResult
     }
     
     private func criteriaChecker(password: String) {
@@ -206,13 +230,33 @@ extension P11PasswordField {
             self.has8Characters = false
         }
         
-        switch self.doesHaveUpperCase(password: password) {
+        switch self.doesHaveUpperCase(password: password) && self.mustHaveUpperCase {
         case true:
             self.hasUpperCase = true
         case false:
             self.hasUpperCase = false
         }
         
+        switch self.doesHaveLowerCase(password: password) && self.mustHaveLowerCase {
+        case true:
+            self.hasLowerCase = true
+        case false:
+            self.hasLowerCase = false
+        }
+        
+        switch self.doesHaveNumber(password: password) && self.mustHaveNumber {
+        case true:
+            self.hasNumber = true
+        case false:
+            self.hasNumber = false
+        }
+    }
+    
+    private func resetBackground() {
+        self.criteriaGreater8.backgroundColor = UIColor.clear
+        self.criteriaUpperCase.backgroundColor = UIColor.clear
+        self.criteriaLowerCase.backgroundColor = UIColor.clear
+        self.criteriaNumber.backgroundColor = UIColor.clear
     }
 }
 
@@ -224,15 +268,13 @@ extension P11PasswordField: PasswordFieldDelegate {
         
         switch text.isEmpty {
         case true:
-            self.criteriaGreater8.backgroundColor = UIColor.clear
-            self.criteriaUpperCase.backgroundColor = UIColor.clear
+            self.resetBackground()
         case false:
             break
         }
         
     }
 }
-
 
 fileprivate protocol PasswordFieldDelegate: class {
     func textFieldDidDelete(textField: PasswordField)
