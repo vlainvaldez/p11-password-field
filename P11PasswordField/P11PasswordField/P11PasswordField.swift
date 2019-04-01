@@ -208,6 +208,8 @@ public final class P11PasswordField: UIView {
     private var mustHaveNumber: Bool = false
     private var mustHaveSpecialCharacters: Bool = false
     
+    private var criteriaValidationArray: [String: Bool] = [String: Bool]()
+    
     private var successAccessory: UIImage!
     // MARK: Initializer
     public override init(frame: CGRect) {
@@ -267,6 +269,7 @@ extension P11PasswordField {
             criteria8CharactersView.setAccessory(accessory)
         }
         
+        self.criteriaValidationArray[Criteria.with8Characters.rawValue] = false
         self.criteriaStackView.addArrangedSubview(criteria8CharactersView)
     }
     
@@ -279,6 +282,7 @@ extension P11PasswordField {
             criteriaUpperCaseView.setAccessory(accessory)
         }
         
+        self.criteriaValidationArray[Criteria.withUpperCase.rawValue] = false
         self.criteriaStackView.addArrangedSubview(criteriaUpperCaseView)
     }
     
@@ -288,6 +292,7 @@ extension P11PasswordField {
         if let accessory = self.successAccessory {
             criteriaLowerCaseView.setAccessory(accessory)
         }
+        self.criteriaValidationArray[Criteria.withLowerCase.rawValue] = false
         self.criteriaStackView.addArrangedSubview(criteriaLowerCaseView)
     }
     
@@ -297,6 +302,7 @@ extension P11PasswordField {
         if let accessory = self.successAccessory {
             criteriaNumberView.setAccessory(accessory)
         }
+        self.criteriaValidationArray[Criteria.withNumber.rawValue] = false
         self.criteriaStackView.addArrangedSubview(criteriaNumberView)
     }
     
@@ -306,11 +312,22 @@ extension P11PasswordField {
         if let accessory = self.successAccessory {
             criteriaSpecialCharactersView.setAccessory(accessory)
         }
+        self.criteriaValidationArray[Criteria.withSpecialCharacters.rawValue] = false
         self.criteriaStackView.addArrangedSubview(criteriaSpecialCharactersView)
     }
     
     public func withAccessory(success: UIImage) {
         self.successAccessory = success
+    }
+    
+    public func isPasswordValid() -> Bool {
+        let validationArray: [Bool] = self.criteriaValidationArray.values.filter{ $0 == false }
+        
+        if validationArray.first != nil {
+            return false
+        } else {
+            return true
+        }
     }
 }
 
@@ -323,7 +340,7 @@ extension P11PasswordField: UITextFieldDelegate {
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let text = textField.text else { return true }
-        self.criteriaChecker(password: text)
+        self.criteriaChecker(password: text)        
         return true
     }
 }
@@ -368,41 +385,60 @@ extension P11PasswordField {
         return specialCharactersResult
     }
     
+    private func updateCriteriaValidation(of criterial: Criteria, with isValid: Bool) {
+        switch self.criteriaValidationArray[criterial.rawValue] == nil {
+        case true:
+            break
+        case false:
+            self.criteriaValidationArray[criterial.rawValue] = isValid
+        }
+    }
+    
     private func criteriaChecker(password: String) {
         
         switch password.count >= 8 && self.mustBe8Characters {
         case true:
             self.has8Characters = true
+            self.updateCriteriaValidation(of: Criteria.with8Characters, with: true)
         case false:
             self.has8Characters = false
+            self.updateCriteriaValidation(of: Criteria.with8Characters, with: false)
         }
         
         switch self.doesHaveUpperCase(password: password) && self.mustHaveUpperCase {
         case true:
             self.hasUpperCase = true
+            self.updateCriteriaValidation(of: Criteria.withUpperCase, with: true)
         case false:
             self.hasUpperCase = false
+            self.updateCriteriaValidation(of: Criteria.withUpperCase, with: false)
         }
         
         switch self.doesHaveLowerCase(password: password) && self.mustHaveLowerCase {
         case true:
             self.hasLowerCase = true
+            self.updateCriteriaValidation(of: Criteria.withLowerCase, with: true)
         case false:
             self.hasLowerCase = false
+            self.updateCriteriaValidation(of: Criteria.withLowerCase, with: false)
         }
         
         switch self.doesHaveNumber(password: password) && self.mustHaveNumber {
         case true:
             self.hasNumber = true
+            self.updateCriteriaValidation(of: Criteria.withNumber, with: true)
         case false:
             self.hasNumber = false
+            self.updateCriteriaValidation(of: Criteria.withNumber, with: false)
         }
         
         switch self.doesHaveSpecialCharacters(password: password) && self.mustHaveSpecialCharacters {
         case true:
             self.hasSpecialCharacters = true
+            self.updateCriteriaValidation(of: Criteria.withSpecialCharacters, with: true)
         case false:
             self.hasSpecialCharacters = false
+            self.updateCriteriaValidation(of: Criteria.withSpecialCharacters, with: false)
         }
     }
     
@@ -472,4 +508,12 @@ fileprivate final class PasswordField: UITextField {
             delegate.textFieldDidDelete(textField: self)
         }
     }
+}
+
+private enum Criteria: String {
+    case with8Characters = "8Characters"
+    case withUpperCase = "upperCase"
+    case withLowerCase = "lowerCase"
+    case withNumber = "number"
+    case withSpecialCharacters = "specialCharacters"
 }
