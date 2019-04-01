@@ -44,6 +44,14 @@
 > ```view.withAccessory(success: #imageLiteral(resourceName: "check-green-icon"))``` must be added before the criteria of password like what I did above
 
 
+#### Check if Password is valid
+
+```
+// isPasswordValid return Bool
+let passwordIsValid = self.passwordField.isPasswordValid()
+
+```
+
 ### Set the Constraints
 
 ```
