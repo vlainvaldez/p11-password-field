@@ -21,7 +21,7 @@ public class MainView: UIView {
         view.withNumber()        
         return view
     }()
-        
+    
     // MARK: Initializer
     public override init(frame: CGRect) {
         super.init(frame: frame)
