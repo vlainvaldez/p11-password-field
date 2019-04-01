@@ -6,10 +6,11 @@
 -  [SnapKit](http://snapkit.io/)
 
 ### Demo
-![alt text](https://github.com/vlainvaldez/DotStepIndicator/blob/stachViewImplementation/dottedStepIndicator.gif)
+#### With Accessory
+![alt text](https://github.com/vlainvaldez/p11-password-field/blob/master/gifs/P11PasswordFieldDemoWithAccessory.gif)
 
-#### With Previous
-![alt text](https://github.com/vlainvaldez/DotStepIndicator/blob/master/withPrevious.gif)
+#### WithOut Accessory
+![alt text](https://github.com/vlainvaldez/p11-password-field/blob/master/gifs/P11PasswordFieldDemoWithOutAccessory.gif)
 
 ### How To Use
 
