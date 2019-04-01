@@ -11,6 +11,7 @@ import SnapKit
 
 public class CriteriaView: UIView {
     
+    // MARK: Subviews
     private let boxView: UIView = {
         let view: UIView = UIView()
         return view
@@ -30,7 +31,10 @@ public class CriteriaView: UIView {
         return view
     }()
     
-    // Initializer
+    // MARK: Stored Properties
+    private var successAccessory: UIImage!
+    
+    // MARK: Initializer
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -51,7 +55,7 @@ public class CriteriaView: UIView {
         }
 
         self.criteriaLabel.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.boxView.snp.bottom).offset(20.0)
+            make.top.equalTo(self.boxView.snp.bottom).offset(5.0)
             make.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
@@ -63,6 +67,7 @@ public class CriteriaView: UIView {
     }
 }
 
+// MARK: - Public APIs
 extension CriteriaView {
     
     public func setCriteria(label: String) {
@@ -76,5 +81,9 @@ extension CriteriaView {
         case false:
             break
         }
+    }
+    
+    public func setAccessory(_ accessory: UIImage) {
+        
     }
 }

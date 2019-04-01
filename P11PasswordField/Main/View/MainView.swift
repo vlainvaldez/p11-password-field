@@ -16,7 +16,6 @@ public class MainView: UIView {
         let view: P11PasswordField = P11PasswordField()
         view.with8Characters()
         view.withUpperCase()
-        view.withLowerCase()
         view.withNumber()
         view.withSpecialCharacters()
         return view
