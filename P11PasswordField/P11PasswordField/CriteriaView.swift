@@ -24,6 +24,12 @@ public class CriteriaView: UIView {
         return view
     }()
     
+    public let criteriaSuccessAccessory: UIImageView = {
+        let view: UIImageView = UIImageView()
+        view.isHidden = true
+        return view
+    }()
+    
     private let criteriaLabel: UILabel = {
         let view: UILabel = UILabel()
         view.text = "Criteria"
@@ -32,7 +38,11 @@ public class CriteriaView: UIView {
     }()
     
     // MARK: Stored Properties
-    private var successAccessory: UIImage!
+    private var successAccessory: UIImage! {
+        didSet{
+            self.criteriaSuccessAccessory.image = self.successAccessory
+        }
+    }
     
     // MARK: Initializer
     public override init(frame: CGRect) {
@@ -42,7 +52,9 @@ public class CriteriaView: UIView {
             self.boxView, self.criteriaLabel
         ])
         
-        self.boxView.subview(forAutoLayout: self.criterialTextIcon)
+        self.boxView.subviews(forAutoLayout: [
+            self.criterialTextIcon, self.criteriaSuccessAccessory
+        ])
         
         self.boxView.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview()
@@ -51,6 +63,12 @@ public class CriteriaView: UIView {
         }
         
         self.criterialTextIcon.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
+            make.centerX.centerY.equalToSuperview()
+        }
+        
+        self.criteriaSuccessAccessory.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
+            make.height.equalTo(25.0)
+            make.width.equalTo(25.0)
             make.centerX.centerY.equalToSuperview()
         }
 
@@ -84,6 +102,6 @@ extension CriteriaView {
     }
     
     public func setAccessory(_ accessory: UIImage) {
-        
+        self.successAccessory = accessory
     }
 }

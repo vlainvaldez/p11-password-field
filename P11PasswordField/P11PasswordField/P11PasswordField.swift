@@ -80,9 +80,20 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.has8Characters {
             case true:
-                self.criteriaGreater8.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                if let _ = self.successAccessory {
+                    self.criteriaGreater8.criterialTextIcon.isHidden = true
+                    self.criteriaGreater8.criteriaSuccessAccessory.isHidden = false
+                } else {
+                    self.criteriaGreater8.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                }
             case false:
-                self.criteriaGreater8.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                switch self.successAccessory == nil {
+                case true:
+                    self.criteriaGreater8.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                case false:
+                    self.criteriaGreater8.criterialTextIcon.isHidden = false
+                    self.criteriaGreater8.criteriaSuccessAccessory.isHidden = true
+                }
             }
         }
     }
@@ -91,19 +102,43 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.hasUpperCase {
             case true:
-                self.criteriaUpperCase.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                if let _ = self.successAccessory {
+                    self.criteriaUpperCase.criterialTextIcon.isHidden = true
+                    self.criteriaUpperCase.criteriaSuccessAccessory.isHidden = false
+                } else {
+                    self.criteriaUpperCase.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                }
             case false:
-                self.criteriaUpperCase.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                switch self.successAccessory == nil {
+                case true:
+                    self.criteriaUpperCase.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                case false:
+                    self.criteriaUpperCase.criterialTextIcon.isHidden = false
+                    self.criteriaUpperCase.criteriaSuccessAccessory.isHidden = true
+                }
             }
+
         }
     }
+    
     private var hasLowerCase: Bool = false {
         didSet {
             switch self.hasLowerCase {
             case true:
-                self.criteriaLowerCase.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                if let _ = self.successAccessory {
+                    self.criteriaLowerCase.criterialTextIcon.isHidden = true
+                    self.criteriaLowerCase.criteriaSuccessAccessory.isHidden = false
+                } else {
+                    self.criteriaLowerCase.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                }
             case false:
-                self.criteriaLowerCase.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                switch self.successAccessory == nil {
+                case true:
+                    self.criteriaLowerCase.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                case false:
+                    self.criteriaLowerCase.criterialTextIcon.isHidden = false
+                    self.criteriaLowerCase.criteriaSuccessAccessory.isHidden = true
+                }
             }
         }
     }
@@ -111,9 +146,21 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.hasNumber {
             case true:
-                self.criteriaNumber.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                
+                if let _ = self.successAccessory {
+                    self.criteriaNumber.criterialTextIcon.isHidden = true
+                    self.criteriaNumber.criteriaSuccessAccessory.isHidden = false
+                } else {
+                    self.criteriaNumber.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                }
             case false:
-                self.criteriaNumber.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                switch self.successAccessory == nil {
+                case true:
+                    self.criteriaNumber.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                case false:
+                    self.criteriaNumber.criterialTextIcon.isHidden = false
+                    self.criteriaNumber.criteriaSuccessAccessory.isHidden = true
+                }
             }
         }
     }
@@ -122,9 +169,21 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.hasSpecialCharacters {
             case true:
-                self.criteriaSpecialCharacters.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                
+                if let _ = self.successAccessory {
+                    self.criteriaSpecialCharacters.criterialTextIcon.isHidden = true
+                    self.criteriaSpecialCharacters.criteriaSuccessAccessory.isHidden = false
+                } else {
+                    self.criteriaSpecialCharacters.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+                }
             case false:
-                self.criteriaSpecialCharacters.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                switch self.successAccessory == nil {
+                case true:
+                    self.criteriaSpecialCharacters.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+                case false:
+                    self.criteriaSpecialCharacters.criterialTextIcon.isHidden = false
+                    self.criteriaSpecialCharacters.criteriaSuccessAccessory.isHidden = true
+                }
             }
         }
     }
@@ -135,6 +194,7 @@ public final class P11PasswordField: UIView {
     private var mustHaveNumber: Bool = false
     private var mustHaveSpecialCharacters: Bool = false
     
+    private var successAccessory: UIImage!
     // MARK: Initializer
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -181,29 +241,57 @@ extension P11PasswordField {
     
     public func with8Characters() {
         self.mustBe8Characters = true
-        self.criteriaStackView.addArrangedSubview(self.criteriaGreater8)
+        let criteria8CharactersView = self.criteriaGreater8
+        
+        if let accessory = self.successAccessory {
+            criteria8CharactersView.setAccessory(accessory)
+        }
+        
+        self.criteriaStackView.addArrangedSubview(criteria8CharactersView)
     }
     
     public func withUpperCase() {
         self.mustHaveUpperCase = true
-        self.criteriaStackView.addArrangedSubview(self.criteriaUpperCase)
+        
+        let criteriaUpperCaseView = self.criteriaUpperCase
+        
+        if let accessory = self.successAccessory {
+            criteriaUpperCaseView.setAccessory(accessory)
+        }
+        
+        self.criteriaStackView.addArrangedSubview(criteriaUpperCaseView)
     }
     
     public func withLowerCase() {
         self.mustHaveLowerCase = true
-        self.criteriaStackView.addArrangedSubview(self.criteriaLowerCase)
+        let criteriaLowerCaseView = self.criteriaLowerCase
+        if let accessory = self.successAccessory {
+            criteriaLowerCaseView.setAccessory(accessory)
+        }
+        self.criteriaStackView.addArrangedSubview(criteriaLowerCaseView)
     }
     
     public func withNumber() {
         self.mustHaveNumber = true
-        self.criteriaStackView.addArrangedSubview(self.criteriaNumber)
+        let criteriaNumberView = self.criteriaNumber
+        if let accessory = self.successAccessory {
+            criteriaNumberView.setAccessory(accessory)
+        }
+        self.criteriaStackView.addArrangedSubview(criteriaNumberView)
     }
     
     public func withSpecialCharacters() {
         self.mustHaveSpecialCharacters = true
-        self.criteriaStackView.addArrangedSubview(self.criteriaSpecialCharacters)
+        let criteriaSpecialCharactersView = self.criteriaSpecialCharacters
+        if let accessory = self.successAccessory {
+            criteriaSpecialCharactersView.setAccessory(accessory)
+        }
+        self.criteriaStackView.addArrangedSubview(criteriaSpecialCharactersView)
     }
     
+    public func withAccessory(success: UIImage) {
+        self.successAccessory = success
+    }
 }
 
 // MARK: - UITextFieldDelegate Methods
@@ -297,6 +385,20 @@ extension P11PasswordField {
         self.criteriaNumber.backgroundColor = UIColor.clear
         self.criteriaSpecialCharacters.backgroundColor = UIColor.clear
     }
+    
+    private func hideAccessory() {
+        self.criteriaGreater8.criteriaSuccessAccessory.isHidden = true
+        self.criteriaUpperCase.criteriaSuccessAccessory.isHidden = true
+        self.criteriaLowerCase.criteriaSuccessAccessory.isHidden = true
+        self.criteriaNumber.criteriaSuccessAccessory.isHidden = true
+        self.criteriaSpecialCharacters.criteriaSuccessAccessory.isHidden = true
+        
+        self.criteriaGreater8.criterialTextIcon.isHidden = false
+        self.criteriaUpperCase.criterialTextIcon.isHidden = false
+        self.criteriaLowerCase.criterialTextIcon.isHidden = false
+        self.criteriaNumber.criterialTextIcon.isHidden = false
+        self.criteriaSpecialCharacters.criterialTextIcon.isHidden = false
+    }
 }
 
 // MARK: PasswordFieldDelegate Methods
@@ -308,6 +410,9 @@ extension P11PasswordField: PasswordFieldDelegate {
         switch text.isEmpty {
         case true:
             self.resetBackground()
+            if let _ = self.successAccessory {
+                self.hideAccessory()
+            }
         case false:
             break
         }

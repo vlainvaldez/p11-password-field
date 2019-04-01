@@ -14,12 +14,14 @@ public class MainView: UIView {
     // MARK: Subviews
     public let passwordField: P11PasswordField = {
         let view: P11PasswordField = P11PasswordField()
-        view.with8Characters()
+        view.withAccessory(success: #imageLiteral(resourceName: "check-green-icon"))
         view.withUpperCase()
-        view.withNumber()
+        view.with8Characters()
         view.withSpecialCharacters()
+        view.withNumber()        
         return view
     }()
+    
     
     // MARK: Initializer
     public override init(frame: CGRect) {
