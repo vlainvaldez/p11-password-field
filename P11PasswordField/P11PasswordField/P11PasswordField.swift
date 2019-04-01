@@ -20,11 +20,24 @@ public final class P11PasswordField: UIView {
         return view
     }()
     
-    private let mainTextField: PasswordField = {
+    public let showPasswordButton: UIButton = {
+        let view: UIButton = UIButton()
+        view.setTitle("SHOW", for: UIControl.State.normal)
+        let color = UIColor(red: 130.0/255.0, green: 154.0/255.0, blue: 160.0/255.0, alpha: 1.0)
+        view.setTitleColor(color, for: UIControl.State.normal)
+        view.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: UIFont.Weight.bold)
+        return view
+    }()
+    
+    private lazy var mainTextField: PasswordField = {
         let view: PasswordField = PasswordField()
         view.isSecureTextEntry = true
         view.borderStyle = UITextField.BorderStyle.none
         view.font = UIFont.systemFont(ofSize: 16.0)
+        let rightButton = self.showPasswordButton
+        rightButton.frame = CGRect(x: 0.0, y: 0.0, width: 60.0, height: 30.0)
+        view.rightViewMode = .always
+        view.rightView = rightButton
         return view
     }()
     
@@ -76,6 +89,7 @@ public final class P11PasswordField: UIView {
         return view
     }()
     
+    // MARK: Stored Properties
     private var has8Characters: Bool = false {
         didSet {
             switch self.has8Characters {
@@ -229,6 +243,12 @@ public final class P11PasswordField: UIView {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+        
+        self.showPasswordButton.addTarget(
+            self,
+            action: #selector(P11PasswordField.showPasswordText),
+            for: UIControl.Event.touchUpInside
+        )
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -308,6 +328,14 @@ extension P11PasswordField: UITextFieldDelegate {
     }
 }
 
+// MARK: - Target Action Methods
+extension P11PasswordField {
+    @objc func showPasswordText() {
+        self.mainTextField.isSecureTextEntry.toggle()
+        let isSecureEntry: Bool = self.mainTextField.isSecureTextEntry
+        self.showPasswordButton.setTitle(isSecureEntry ? "SHOW": "HIDE", for: UIControl.State.normal)
+    }
+}
 
 // MARK: - Helper Functions
 extension P11PasswordField {
