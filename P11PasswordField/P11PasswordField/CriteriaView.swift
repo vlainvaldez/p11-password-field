@@ -90,6 +90,7 @@ extension CriteriaView {
     
     public func setCriteria(label: String) {
         self.criteriaLabel.text = label
+        self.criteriaLabel.adjustsFontSizeToFitWidth = true
     }
     
     public func setCriteriaTextIcon(with label: String) {

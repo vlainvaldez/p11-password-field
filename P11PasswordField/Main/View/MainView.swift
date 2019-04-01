@@ -21,8 +21,7 @@ public class MainView: UIView {
         view.withNumber()        
         return view
     }()
-    
-    
+        
     // MARK: Initializer
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,8 +32,8 @@ public class MainView: UIView {
         
         self.passwordField.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.height.equalTo(120.0)
-            make.leading.equalToSuperview().offset(50.0)
-            make.trailing.equalToSuperview().inset(50.0)
+            make.leading.equalToSuperview().offset(30.0)
+            make.trailing.equalToSuperview().inset(30.0)
             make.centerY.equalToSuperview()
         }
     }
