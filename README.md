@@ -28,7 +28,7 @@
     }()
 ```
 
-#### Witho Success Accessory
+#### With Success Accessory
 ```
     public let passwordField: P11PasswordField = {
         let view: P11PasswordField = P11PasswordField()
@@ -39,6 +39,9 @@
         return view
     }()
 ```
+#### NOTE:
+> ```view.withAccessory(success: #imageLiteral(resourceName: "check-green-icon"))``` must be added before the criteria of password like what I did above
+
 
 ### Set the Constraints
 
