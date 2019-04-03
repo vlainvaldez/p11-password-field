@@ -2,13 +2,13 @@
 //  P11TextField.swift
 //  P11PasswordField
 //
-//  Created by Novare Account on 29/03/2019.
-//  Copyright © 2019 Novare Account. All rights reserved.
+//  Created by Alvin Joseph Valdez on 29/03/2019.
+//  Copyright © 2019 Alvin Joseph Valdez. All rights reserved.
 //
 
 import UIKit
 import SnapKit
-
+//swiftlint:disable file_length
 public final class P11PasswordField: UIView {
     
     // MARK: Subviews
@@ -49,7 +49,7 @@ public final class P11PasswordField: UIView {
     
     public let criteriaGreater8: CriteriaView = {
         let view: CriteriaView = CriteriaView()
-         view.setCriteria(label: "Characters")
+        view.setCriteria(label: "Characters")
         return view
     }()
     
@@ -94,7 +94,7 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.has8Characters {
             case true:
-                if let _ = self.successAccessory {
+                if self.successAccessory != nil {
                     self.criteriaGreater8.criterialTextIcon.isHidden = true
                     self.criteriaGreater8.criteriaSuccessAccessory.isHidden = false
                 } else {
@@ -116,7 +116,7 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.hasUpperCase {
             case true:
-                if let _ = self.successAccessory {
+                if self.successAccessory != nil {
                     self.criteriaUpperCase.criterialTextIcon.isHidden = true
                     self.criteriaUpperCase.criteriaSuccessAccessory.isHidden = false
                 } else {
@@ -131,7 +131,6 @@ public final class P11PasswordField: UIView {
                     self.criteriaUpperCase.criteriaSuccessAccessory.isHidden = true
                 }
             }
-
         }
     }
     
@@ -139,7 +138,7 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.hasLowerCase {
             case true:
-                if let _ = self.successAccessory {
+                if self.successAccessory != nil {
                     self.criteriaLowerCase.criterialTextIcon.isHidden = true
                     self.criteriaLowerCase.criteriaSuccessAccessory.isHidden = false
                 } else {
@@ -160,8 +159,7 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.hasNumber {
             case true:
-                
-                if let _ = self.successAccessory {
+                if self.successAccessory != nil {
                     self.criteriaNumber.criterialTextIcon.isHidden = true
                     self.criteriaNumber.criteriaSuccessAccessory.isHidden = false
                 } else {
@@ -183,8 +181,7 @@ public final class P11PasswordField: UIView {
         didSet {
             switch self.hasSpecialCharacters {
             case true:
-                
-                if let _ = self.successAccessory {
+                if self.successAccessory != nil {
                     self.criteriaSpecialCharacters.criterialTextIcon.isHidden = true
                     self.criteriaSpecialCharacters.criteriaSuccessAccessory.isHidden = false
                 } else {
@@ -221,7 +218,7 @@ public final class P11PasswordField: UIView {
         self.subviews(forAutoLayout: [
             self.passwordLabel, self.mainTextField,
             self.horizontalLineView, self.criteriaStackView
-        ])
+            ])
         
         self.passwordLabel.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview()
@@ -250,6 +247,12 @@ public final class P11PasswordField: UIView {
             self,
             action: #selector(P11PasswordField.showPasswordText),
             for: UIControl.Event.touchUpInside
+        )
+        
+        self.mainTextField.addTarget(
+            self,
+            action: #selector(P11PasswordField.textFieldDidChanged),
+            for: UIControl.Event.editingChanged
         )
     }
     
@@ -321,7 +324,7 @@ extension P11PasswordField {
     }
     
     public func isPasswordValid() -> Bool {
-        let validationArray: [Bool] = self.criteriaValidationArray.values.filter{ $0 == false }
+        let validationArray: [Bool] = self.criteriaValidationArray.values.filter { $0 == false }
         
         if validationArray.first != nil {
             return false
@@ -340,7 +343,7 @@ extension P11PasswordField: UITextFieldDelegate {
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let text = textField.text else { return true }
-        self.criteriaChecker(password: text)        
+        self.criteriaChecker(password: text)
         return true
     }
 }
@@ -352,6 +355,12 @@ extension P11PasswordField {
         let isSecureEntry: Bool = self.mainTextField.isSecureTextEntry
         self.showPasswordButton.setTitle(isSecureEntry ? "SHOW": "HIDE", for: UIControl.State.normal)
     }
+    
+    
+    @objc func textFieldDidChanged(_ textField: UITextField) {
+        guard let text = textField.text else { return }
+        self.criteriaChecker(password: text)
+    }
 }
 
 // MARK: - Helper Functions
@@ -359,28 +368,28 @@ extension P11PasswordField {
     
     private func doesHaveUpperCase(password: String) -> Bool {
         let upperCaseLetterRegEx  = ".*[A-Z]+.*"
-        let textMatch = NSPredicate(format:"SELF MATCHES %@", upperCaseLetterRegEx)
+        let textMatch = NSPredicate(format: "SELF MATCHES %@", upperCaseLetterRegEx)
         let upperCaseResult = textMatch.evaluate(with: password)
         return upperCaseResult
     }
     
     private func doesHaveLowerCase(password: String) -> Bool {
         let lowerCaseLetterRegEx  = ".*[a-z]+.*"
-        let textMatch = NSPredicate(format:"SELF MATCHES %@", lowerCaseLetterRegEx)
+        let textMatch = NSPredicate(format: "SELF MATCHES %@", lowerCaseLetterRegEx)
         let lowerCaseResult = textMatch.evaluate(with: password)
         return lowerCaseResult
     }
     
     private func doesHaveNumber(password: String) -> Bool {
         let numberRegEx  = ".*[0-9]+.*"
-        let textMatch = NSPredicate(format:"SELF MATCHES %@", numberRegEx)
+        let textMatch = NSPredicate(format: "SELF MATCHES %@", numberRegEx)
         let numberResult = textMatch.evaluate(with: password)
         return numberResult
     }
     
     private func doesHaveSpecialCharacters(password: String) -> Bool {
         let specialCharactersRegEx  = ".*[!&^%$#@()/]+.*"
-        let textMatch = NSPredicate(format:"SELF MATCHES %@", specialCharactersRegEx)
+        let textMatch = NSPredicate(format: "SELF MATCHES %@", specialCharactersRegEx)
         let specialCharactersResult = textMatch.evaluate(with: password)
         return specialCharactersResult
     }
@@ -474,17 +483,16 @@ extension P11PasswordField: PasswordFieldDelegate {
         switch text.isEmpty {
         case true:
             self.resetBackground()
-            if let _ = self.successAccessory {
+            if self.successAccessory != nil {
                 self.hideAccessory()
             }
         case false:
             break
         }
-        
     }
 }
 
-fileprivate protocol PasswordFieldDelegate: class {
+fileprivate protocol PasswordFieldDelegate: class { //swiftlint:disable:this private_over_fileprivate
     func textFieldDidDelete(textField: PasswordField)
 }
 
