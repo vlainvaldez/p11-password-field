@@ -14,11 +14,13 @@ public class MainView: UIView {
     // MARK: Subviews
     public let passwordField: P11PasswordField = {
         let view: P11PasswordField = P11PasswordField()
-        view.withAccessory(success: #imageLiteral(resourceName: "check-green-icon"))
+//        view.withAccessory(success: #imageLiteral(resourceName: "check-green-icon"))
         view.withUpperCase()
         view.with8Characters()
         view.withSpecialCharacters()
         view.withNumber()
+//        view.withError(message: "Password Error")
+//        view.withSuccess(message: String)
         return view
     }()
     
@@ -36,6 +38,7 @@ public class MainView: UIView {
             make.trailing.equalToSuperview().inset(30.0)
             make.centerY.equalToSuperview()
         }
+        
     }
     
     public required init?(coder aDecoder: NSCoder) {

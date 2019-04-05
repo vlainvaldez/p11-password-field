@@ -81,6 +81,13 @@ public final class P11PasswordField: UIView {
         return view
     }()
     
+    private let errorMessageLabel: UILabel = {
+        let view: UILabel = UILabel()
+        view.textColor = UIColor.red.withAlphaComponent(0.5)
+        view.isHidden = true
+        return view
+    }()
+    
     private let criteriaStackView: UIStackView = {
         let view: UIStackView = UIStackView()
         view.axis = NSLayoutConstraint.Axis.horizontal
@@ -234,7 +241,7 @@ public final class P11PasswordField: UIView {
         self.horizontalLineView.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(1.0)
-            make.centerY.equalTo(self.mainTextField.snp.bottom)
+            make.top.equalTo(self.mainTextField.snp.bottom).offset(6.0)
         }
         
         self.criteriaStackView.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
@@ -248,7 +255,7 @@ public final class P11PasswordField: UIView {
             action: #selector(P11PasswordField.showPasswordText),
             for: UIControl.Event.touchUpInside
         )
-        
+
         self.mainTextField.addTarget(
             self,
             action: #selector(P11PasswordField.textFieldDidChanged),
@@ -323,6 +330,17 @@ extension P11PasswordField {
         self.successAccessory = success
     }
     
+    public func withError(message: String) {
+        self.errorMessageLabel.text = message
+        self.errorMessageLabel.isHidden = false
+        self.subview(forAutoLayout: self.errorMessageLabel)
+        
+        self.errorMessageLabel.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.horizontalLineView.snp.bottom).offset(5.0)
+            make.leading.equalTo(self.horizontalLineView.snp.leading)
+        }
+    }
+    
     public func isPasswordValid() -> Bool {
         let validationArray: [Bool] = self.criteriaValidationArray.values.filter { $0 == false }
         
@@ -355,8 +373,7 @@ extension P11PasswordField {
         let isSecureEntry: Bool = self.mainTextField.isSecureTextEntry
         self.showPasswordButton.setTitle(isSecureEntry ? "SHOW": "HIDE", for: UIControl.State.normal)
     }
-    
-    
+
     @objc func textFieldDidChanged(_ textField: UITextField) {
         guard let text = textField.text else { return }
         self.criteriaChecker(password: text)
