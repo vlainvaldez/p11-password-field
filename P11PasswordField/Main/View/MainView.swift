@@ -23,6 +23,12 @@ public class MainView: UIView {
         return view
     }()
     
+    public let simpleTextField: UITextField = {
+        let view: UITextField = UITextField()
+        view.borderStyle = UITextField.BorderStyle.line
+        return view
+    }()
+    
     public let button: UIButton = {
         let view: UIButton = UIButton()
         view.setTitle("Click Me", for: UIControl.State.normal)
@@ -37,7 +43,8 @@ public class MainView: UIView {
         self.backgroundColor = UIColor.white
         
         self.subviews(forAutoLayout: [
-            self.passwordField, self.button
+            self.passwordField, self.button,
+            self.simpleTextField
         ])
         
         self.passwordField.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
@@ -54,11 +61,20 @@ public class MainView: UIView {
             make.width.equalTo(100.0)
         }
         
+        self.simpleTextField.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.button.snp.bottom).offset(20.0)
+            make.height.equalTo(120.0)
+            make.leading.equalToSuperview().offset(30.0)
+            make.trailing.equalToSuperview().inset(30.0)
+        }
+        
         self.button.addTarget(
             self,
             action: #selector(MainView.buttonTapped),
             for: UIControl.Event.touchUpInside
         )
+        
+        self.passwordField.delegate = self
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -71,7 +87,21 @@ public class MainView: UIView {
 extension MainView {
     
     @objc func buttonTapped() {
-        self.passwordField.setError(with: "Password error")        
+        self.passwordField.setError(with: "Error Password")
         print(self.passwordField.isPasswordValid())
     }
+}
+
+extension MainView: P11PasswordFieldDelegate {
+    public func outFocused(textField: UITextField, label: UILabel, horizontalLine: UIView) {
+        label.textColor = UIColor.lightGray
+        horizontalLine.backgroundColor = UIColor.lightGray
+    }
+
+    public func onFocused(textField: UITextField, label: UILabel, horizontalLine: UIView) {
+        label.textColor = UIColor.blue.withAlphaComponent(0.5)
+        horizontalLine.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
+    }
+    
+    
 }

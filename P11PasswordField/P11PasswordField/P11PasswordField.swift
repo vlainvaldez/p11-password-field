@@ -11,6 +11,9 @@ import SnapKit
 //swiftlint:disable file_length
 public final class P11PasswordField: UIView {
     
+    // MARK:  Delegates
+    public weak var delegate: P11PasswordFieldDelegate!
+    
     // MARK: Subviews
     private let passwordLabel: UILabel = {
         let view: UILabel = UILabel()
@@ -228,7 +231,7 @@ public final class P11PasswordField: UIView {
         self.subviews(forAutoLayout: [
             self.passwordLabel, self.mainTextField,
             self.horizontalLineView, self.criteriaStackView
-            ])
+        ])
         
         self.passwordLabel.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview()
@@ -263,6 +266,18 @@ public final class P11PasswordField: UIView {
             self,
             action: #selector(P11PasswordField.textFieldDidChanged),
             for: UIControl.Event.editingChanged
+        )
+        
+        self.mainTextField.addTarget(
+            self,
+            action: #selector(P11PasswordField.textFieldTouched),
+            for: UIControl.Event.touchDown
+        )
+        
+        self.mainTextField.addTarget(
+            self,
+            action: #selector(P11PasswordField.textFieldOutFocused),
+            for: UIControl.Event.editingDidEnd
         )
     }
     
@@ -333,10 +348,11 @@ extension P11PasswordField {
         self.successAccessory = success
     }
     
-    public func setError(with message: String) {
+    public func setError(with message: String, color: UIColor = UIColor.red.withAlphaComponent(0.5)) {
         switch self.criteriaStackView.arrangedSubviews.isEmpty {
         case true:
             self.errorMessageLabel.text = message
+            self.errorMessageLabel.textColor = color
             self.errorMessageLabel.isHidden = false
             self.passwordIsValid = false
             self.subview(forAutoLayout: self.errorMessageLabel)
@@ -411,6 +427,26 @@ extension P11PasswordField {
     @objc func textFieldDidChanged(_ textField: UITextField) {
         guard let text = textField.text else { return }
         self.criteriaChecker(password: text)
+    }
+    
+    @objc func textFieldTouched() {
+        if let delegate = self.delegate{
+            delegate.onFocused(
+                textField: self.mainTextField,
+                label: self.passwordLabel,
+                horizontalLine: self.horizontalLineView
+            )
+        }
+    }
+    
+    @objc func textFieldOutFocused() {
+        if let delegate = self.delegate{
+            delegate.outFocused(
+                textField: self.mainTextField,
+                label: self.passwordLabel,
+                horizontalLine: self.horizontalLineView
+            )
+        }
     }
 }
 

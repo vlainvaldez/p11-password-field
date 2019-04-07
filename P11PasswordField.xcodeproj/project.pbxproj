@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		405F858EAE2B45BD56E3AD60 /* Pods_P11PasswordFieldTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A2C7F3E1061869B49BD8418 /* Pods_P11PasswordFieldTests.framework */; };
 		6DA74C34168B551C75213B04 /* Pods_P11PasswordFieldUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E0A85110EA9E729D051E725 /* Pods_P11PasswordFieldUITests.framework */; };
+		7CD6FEFB2259B848007C283F /* P11PasswordFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD6FEFA2259B848007C283F /* P11PasswordFieldDelegate.swift */; };
 		81833FD1224DE189009D082F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81833FD0224DE189009D082F /* AppDelegate.swift */; };
 		81833FD3224DE189009D082F /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81833FD2224DE189009D082F /* MainVC.swift */; };
 		81833FD8224DE18C009D082F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81833FD7224DE18C009D082F /* Assets.xcassets */; };
@@ -44,6 +45,7 @@
 		1063887086EFA454B6D768A1 /* Pods_P11PasswordField.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_P11PasswordField.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C4C48674B43E680A23C5065 /* Pods-P11PasswordFieldUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-P11PasswordFieldUITests.debug.xcconfig"; path = "Target Support Files/Pods-P11PasswordFieldUITests/Pods-P11PasswordFieldUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		2F186DBB759B4CE9300D6459 /* Pods-P11PasswordFieldTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-P11PasswordFieldTests.release.xcconfig"; path = "Target Support Files/Pods-P11PasswordFieldTests/Pods-P11PasswordFieldTests.release.xcconfig"; sourceTree = "<group>"; };
+		7CD6FEFA2259B848007C283F /* P11PasswordFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = P11PasswordFieldDelegate.swift; sourceTree = "<group>"; };
 		7E0A85110EA9E729D051E725 /* Pods_P11PasswordFieldUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_P11PasswordFieldUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		81833FCD224DE189009D082F /* P11PasswordField.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = P11PasswordField.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81833FD0224DE189009D082F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -116,6 +118,14 @@
 				E8CEFD1B23AB67B8928763E8 /* Pods-P11PasswordFieldUITests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		7CD6FEF92259B830007C283F /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7CD6FEFA2259B848007C283F /* P11PasswordFieldDelegate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		81833FC4224DE189009D082F = {
@@ -256,6 +266,7 @@
 		8183400C224DE57D009D082F /* P11PasswordField */ = {
 			isa = PBXGroup;
 			children = (
+				7CD6FEF92259B830007C283F /* Protocols */,
 				8183400D224DE5BB009D082F /* P11PasswordField.swift */,
 				8183400F224DEF40009D082F /* CriteriaView.swift */,
 			);
@@ -489,6 +500,7 @@
 			files = (
 				8183400E224DE5BB009D082F /* P11PasswordField.swift in Sources */,
 				81834006224DE22A009D082F /* UIViewExtension.swift in Sources */,
+				7CD6FEFB2259B848007C283F /* P11PasswordFieldDelegate.swift in Sources */,
 				8183400B224DE440009D082F /* MainView.swift in Sources */,
 				81833FD3224DE189009D082F /* MainVC.swift in Sources */,
 				81833FD1224DE189009D082F /* AppDelegate.swift in Sources */,
