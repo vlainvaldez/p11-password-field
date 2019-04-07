@@ -15,12 +15,18 @@ public class MainView: UIView {
     public let passwordField: P11PasswordField = {
         let view: P11PasswordField = P11PasswordField()
 //        view.withAccessory(success: #imageLiteral(resourceName: "check-green-icon"))
-        view.withUpperCase()
-        view.with8Characters()
-        view.withSpecialCharacters()
-        view.withNumber()
-//        view.withError(message: "Password Error")
-//        view.withSuccess(message: String)
+//        view.withUpperCase()
+//        view.with8Characters()
+//        view.withSpecialCharacters()
+//        view.withNumber()
+//        view.setError(with: "Password Error")
+        return view
+    }()
+    
+    public let button: UIButton = {
+        let view: UIButton = UIButton()
+        view.setTitle("Click Me", for: UIControl.State.normal)
+        view.setTitleColor(UIColor.blue, for: UIControl.State.normal)
         return view
     }()
     
@@ -30,7 +36,9 @@ public class MainView: UIView {
         
         self.backgroundColor = UIColor.white
         
-        self.subview(forAutoLayout: self.passwordField)
+        self.subviews(forAutoLayout: [
+            self.passwordField, self.button
+        ])
         
         self.passwordField.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.height.equalTo(120.0)
@@ -39,10 +47,31 @@ public class MainView: UIView {
             make.centerY.equalToSuperview()
         }
         
+        self.button.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+            make.top.equalTo(self.passwordField.snp.bottom).offset(20.0)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(60.0)
+            make.width.equalTo(100.0)
+        }
+        
+        self.button.addTarget(
+            self,
+            action: #selector(MainView.buttonTapped),
+            for: UIControl.Event.touchUpInside
+        )
     }
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+}
+
+// MARK: Target Action Methods
+extension MainView {
+    
+    @objc func buttonTapped() {
+        self.passwordField.setError(with: "Password error")        
+        print(self.passwordField.isPasswordValid())
+    }
 }

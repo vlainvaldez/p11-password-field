@@ -212,6 +212,9 @@ public final class P11PasswordField: UIView {
     private var mustHaveNumber: Bool = false
     private var mustHaveSpecialCharacters: Bool = false
     
+    // Use this with withError and Not with criteria
+    private var passwordIsValid: Bool = true
+    
     private var criteriaValidationArray: [String: Bool] = [String: Bool]()
     
     private var successAccessory: UIImage!
@@ -330,24 +333,55 @@ extension P11PasswordField {
         self.successAccessory = success
     }
     
-    public func withError(message: String) {
-        self.errorMessageLabel.text = message
-        self.errorMessageLabel.isHidden = false
-        self.subview(forAutoLayout: self.errorMessageLabel)
-        
-        self.errorMessageLabel.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
-            make.top.equalTo(self.horizontalLineView.snp.bottom).offset(5.0)
-            make.leading.equalTo(self.horizontalLineView.snp.leading)
+    public func setError(with message: String) {
+        switch self.criteriaStackView.arrangedSubviews.isEmpty {
+        case true:
+            self.errorMessageLabel.text = message
+            self.errorMessageLabel.isHidden = false
+            self.passwordIsValid = false
+            self.subview(forAutoLayout: self.errorMessageLabel)
+            
+            self.errorMessageLabel.snp.remakeConstraints { [unowned self] (make: ConstraintMaker) -> Void in
+                make.top.equalTo(self.horizontalLineView.snp.bottom).offset(5.0)
+                make.leading.equalTo(self.horizontalLineView.snp.leading)
+            }
+        case false:
+            fatalError(
+                """
+                    WithError cannot be used allong side with criteria
+                    ex. withAccessory, withSpecialCharacters etc..
+                """
+            )
+        }
+    }
+    
+    public func setSuccess() {
+        switch self.criteriaStackView.arrangedSubviews.isEmpty {
+        case true:
+            self.errorMessageLabel.isHidden = true
+            self.passwordIsValid = true
+            self.errorMessageLabel.removeFromSuperview()
+        case false:
+            fatalError(
+                """
+                    WithError cannot be used allong side with criteria
+                    ex. withAccessory, withSpecialCharacters etc..
+                """
+            )
         }
     }
     
     public func isPasswordValid() -> Bool {
-        let validationArray: [Bool] = self.criteriaValidationArray.values.filter { $0 == false }
-        
-        if validationArray.first != nil {
-            return false
-        } else {
-            return true
+        switch self.criteriaStackView.arrangedSubviews.isEmpty {
+        case true:
+            return self.passwordIsValid
+        case false:
+            let validationArray: [Bool] = self.criteriaValidationArray.values.filter { $0 == false }
+            if validationArray.first != nil {
+                return false
+            } else {
+                return true
+            }
         }
     }
 }
