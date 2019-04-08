@@ -8,7 +8,8 @@
 
 import UIKit
 
-public protocol P11PasswordFieldDelegate: class {    
-    func onFocused(textField: UITextField, label: UILabel, horizontalLine: UIView)    
-    func outFocused(textField: UITextField, label: UILabel, horizontalLine: UIView)
+@objc public protocol P11PasswordFieldDelegate: class {
+    @objc optional func onFocused(textField: UITextField, label: UILabel, horizontalLine: UIView)    
+    @objc optional func outFocused(textField: UITextField, label: UILabel, horizontalLine: UIView)
+    @objc optional func onReturn(textField: UITextField, label: UILabel, horizontalLine: UIView) -> Bool
 }

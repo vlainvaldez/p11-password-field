@@ -103,5 +103,9 @@ extension MainView: P11PasswordFieldDelegate {
         horizontalLine.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
     }
     
+    public func onReturn(textField: UITextField, label: UILabel, horizontalLine: UIView) -> Bool {
+        self.endEditing(true)
+        return true
+    }
     
 }

@@ -11,7 +11,7 @@ import SnapKit
 //swiftlint:disable file_length
 public final class P11PasswordField: UIView {
     
-    // MARK:  Delegates
+    // MARK: Delegates
     public weak var delegate: P11PasswordFieldDelegate!
     
     // MARK: Subviews
@@ -222,16 +222,19 @@ public final class P11PasswordField: UIView {
     
     private var successAccessory: UIImage!
     // MARK: Initializer
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+    public init(color: UIColor = UIColor.black) {
+        super.init(frame: CGRect.zero)
         
         self.mainTextField.delegate = self
         self.mainTextField.passwordfieldDelegate = self
         
+        self.passwordLabel.textColor = color
+        self.horizontalLineView.backgroundColor = color
+        
         self.subviews(forAutoLayout: [
             self.passwordLabel, self.mainTextField,
             self.horizontalLineView, self.criteriaStackView
-        ])
+            ])
         
         self.passwordLabel.snp.remakeConstraints { (make: ConstraintMaker) -> Void in
             make.top.equalToSuperview()
@@ -261,7 +264,7 @@ public final class P11PasswordField: UIView {
             action: #selector(P11PasswordField.showPasswordText),
             for: UIControl.Event.touchUpInside
         )
-
+        
         self.mainTextField.addTarget(
             self,
             action: #selector(P11PasswordField.textFieldDidChanged),
@@ -412,6 +415,13 @@ extension P11PasswordField: UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let text = textField.text else { return true }
         self.criteriaChecker(password: text)
+        if let delegate = self.delegate{
+            return delegate.onReturn!(
+                textField: self.mainTextField,
+                label: self.passwordLabel,
+                horizontalLine: self.horizontalLineView
+            )
+        }
         return true
     }
 }
@@ -423,15 +433,15 @@ extension P11PasswordField {
         let isSecureEntry: Bool = self.mainTextField.isSecureTextEntry
         self.showPasswordButton.setTitle(isSecureEntry ? "SHOW": "HIDE", for: UIControl.State.normal)
     }
-
+    
     @objc func textFieldDidChanged(_ textField: UITextField) {
         guard let text = textField.text else { return }
         self.criteriaChecker(password: text)
     }
     
     @objc func textFieldTouched() {
-        if let delegate = self.delegate{
-            delegate.onFocused(
+        if let delegate = self.delegate {
+            delegate.onFocused!(
                 textField: self.mainTextField,
                 label: self.passwordLabel,
                 horizontalLine: self.horizontalLineView
@@ -440,8 +450,8 @@ extension P11PasswordField {
     }
     
     @objc func textFieldOutFocused() {
-        if let delegate = self.delegate{
-            delegate.outFocused(
+        if let delegate = self.delegate {
+            delegate.outFocused!(
                 textField: self.mainTextField,
                 label: self.passwordLabel,
                 horizontalLine: self.horizontalLineView
