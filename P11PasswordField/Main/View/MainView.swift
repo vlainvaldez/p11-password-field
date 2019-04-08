@@ -93,11 +93,12 @@ extension MainView {
 }
 
 extension MainView: P11PasswordFieldDelegate {
+    
     public func outFocused(textField: UITextField, label: UILabel, horizontalLine: UIView) {
         label.textColor = UIColor.lightGray
         horizontalLine.backgroundColor = UIColor.lightGray
     }
-
+    
     public func onFocused(textField: UITextField, label: UILabel, horizontalLine: UIView) {
         label.textColor = UIColor.blue.withAlphaComponent(0.5)
         horizontalLine.backgroundColor = UIColor.blue.withAlphaComponent(0.5)

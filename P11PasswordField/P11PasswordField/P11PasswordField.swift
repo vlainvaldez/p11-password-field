@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 //swiftlint:disable file_length
-public final class P11PasswordField: UIView {
+public class P11PasswordField: UIView {
     
     // MARK: Delegates
     public weak var delegate: P11PasswordFieldDelegate!
@@ -416,7 +416,7 @@ extension P11PasswordField: UITextFieldDelegate {
         guard let text = textField.text else { return true }
         self.criteriaChecker(password: text)
         if let delegate = self.delegate{
-            return delegate.onReturn!(
+            return delegate.onReturn(
                 textField: self.mainTextField,
                 label: self.passwordLabel,
                 horizontalLine: self.horizontalLineView
@@ -441,7 +441,7 @@ extension P11PasswordField {
     
     @objc func textFieldTouched() {
         if let delegate = self.delegate {
-            delegate.onFocused!(
+            delegate.onFocused(
                 textField: self.mainTextField,
                 label: self.passwordLabel,
                 horizontalLine: self.horizontalLineView
@@ -451,7 +451,7 @@ extension P11PasswordField {
     
     @objc func textFieldOutFocused() {
         if let delegate = self.delegate {
-            delegate.outFocused!(
+            delegate.outFocused(
                 textField: self.mainTextField,
                 label: self.passwordLabel,
                 horizontalLine: self.horizontalLineView
